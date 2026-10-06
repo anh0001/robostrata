@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "Fact": {
+      "additionalProperties": false,
+      "description": "One piece of evidence about the world, with provenance and freshness.",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "observation_time": {
+          "title": "Observation Time",
+          "type": "number"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "default": "v1alpha1",
+          "pattern": "^v\\d+(alpha|beta)?\\d*$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "validity_s": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validity S"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "predicate",
+        "value",
+        "source",
+        "observation_time"
+      ],
+      "title": "Fact",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "An immutable view of the world at one revision.",
+  "properties": {
+    "facts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Fact"
+      },
+      "title": "Facts",
+      "type": "array"
+    },
+    "revision": {
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "minLength": 1,
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "time": {
+      "title": "Time",
+      "type": "number"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "revision",
+    "time"
+  ],
+  "title": "WorldSnapshot",
+  "type": "object"
+}

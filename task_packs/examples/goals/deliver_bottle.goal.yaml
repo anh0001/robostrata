@@ -1,0 +1,9 @@
+goal_id: deliver_bottle_17
+objective: deliver_object
+parameters:
+  object: bottle_17
+  pickup_location: kitchen_table
+  delivery_location: desk_2
+success_criteria:
+  - {predicate: at, args: [bottle_17, desk_2], expected: true}
+  - {predicate: holding, args: [robot, bottle_17], expected: false}

@@ -1,0 +1,11 @@
+skill_id: navigation.go_to
+description: Drive the mobile base to a named location.
+inputs:
+  - {name: location, type: entity}
+expected_effects:
+  - {predicate: at, args: [robot, "$location"], expected: true}
+verification: {required: true, verifier_id: world_fact}
+cancellation: {mode: safe_state_first, max_stop_time_s: 2.0}
+failure_semantics: {timeout_s: 60.0, retryable: true}
+required_capabilities: [navigation.ground]
+required_resources: [base]

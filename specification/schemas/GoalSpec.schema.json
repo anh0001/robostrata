@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "Constraint": {
+      "additionalProperties": false,
+      "description": "A limit the mission must respect. Hard constraints that no component enforces are rejected.",
+      "properties": {
+        "hard": {
+          "default": true,
+          "title": "Hard",
+          "type": "boolean"
+        },
+        "limit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Quantity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Constraint",
+      "type": "object"
+    },
+    "HumanInteractionPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "require_plan_confirmation": {
+          "default": false,
+          "title": "Require Plan Confirmation",
+          "type": "boolean"
+        }
+      },
+      "title": "HumanInteractionPolicy",
+      "type": "object"
+    },
+    "Quantity": {
+      "additionalProperties": false,
+      "description": "A physical quantity with an explicit unit; never a bare float with an implied unit.",
+      "properties": {
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ],
+      "title": "Quantity",
+      "type": "object"
+    },
+    "SuccessCriterion": {
+      "additionalProperties": false,
+      "description": "A world predicate that must hold, on fresh evidence, for the goal to count as achieved.",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "expected": {
+          "default": true,
+          "title": "Expected",
+          "type": "boolean"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predicate"
+      ],
+      "title": "SuccessCriterion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "constraints": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Constraint"
+      },
+      "title": "Constraints",
+      "type": "array"
+    },
+    "deadline_s": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deadline S"
+    },
+    "goal_id": {
+      "minLength": 1,
+      "title": "Goal Id",
+      "type": "string"
+    },
+    "human_policy": {
+      "$ref": "#/$defs/HumanInteractionPolicy"
+    },
+    "objective": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Objective",
+      "type": "string"
+    },
+    "parameters": {
+      "additionalProperties": true,
+      "title": "Parameters",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "success_criteria": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SuccessCriterion"
+      },
+      "title": "Success Criteria",
+      "type": "array"
+    }
+  },
+  "required": [
+    "goal_id",
+    "objective"
+  ],
+  "title": "GoalSpec",
+  "type": "object"
+}

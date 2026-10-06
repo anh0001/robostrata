@@ -1,0 +1,29 @@
+# Mock mobile manipulator: a component graph, not a fixed base+arm+gripper template.
+robot_id: mock_mobile_manipulator
+components:
+  - component_id: base
+    type: mobile_base
+    resources: [{resource_id: base, kind: actuator}]
+    interfaces: [cmd_vel, odometry]
+  - component_id: arm_0
+    type: arm_6dof
+    resources: [{resource_id: arm_0, kind: actuator}]
+    interfaces: [joint_trajectory]
+  - component_id: gripper_0
+    type: parallel_gripper
+    resources: [{resource_id: gripper_0, kind: actuator}]
+    interfaces: [gripper_command]
+  - component_id: camera_0
+    type: rgbd_camera
+    interfaces: [rgb, depth]
+edges:
+  - {parent: base, child: arm_0, joint: arm_mount}
+  - {parent: arm_0, child: gripper_0, joint: tool_flange}
+  - {parent: arm_0, child: camera_0, joint: wrist_camera_mount}
+capabilities:
+  - {capability: navigation.ground, components: [base], structural: true}
+  - {capability: manipulation.single_arm, components: [arm_0, gripper_0], structural: true}
+  - {capability: perception.rgbd, components: [camera_0], structural: true}
+calibration_ref: null
+safety_ref: mock
+description_ref: null

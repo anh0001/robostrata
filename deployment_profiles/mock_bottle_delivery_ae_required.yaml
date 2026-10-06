@@ -1,0 +1,15 @@
+# Research profile: identical to the baseline but requires the affordance–effectivity extension.
+# The extension ships in Phase 3, so this profile must fail with `extension_required` — never run
+# silently without it.
+api_version: robot_framework/v1alpha1
+task_pack: examples
+robot_pack: mock_mobile_manipulator
+default_goal: goals/deliver_bottle.goal.yaml
+deployment: {mode: mock, backend: mock_sim, profile: mock}
+planning: {plugin: manual, output_kind: task_graph}
+execution: {plugin: sequential, lease_ttl_s: 5.0, monitor_poll_s: 0.005}
+extensions:
+  - {id: anhar_affordance_effectivity, required: true}
+verification: {profile: evidence_based}
+safety: {profile: mock}
+recording: {mission_events: true, decision_evidence: true}

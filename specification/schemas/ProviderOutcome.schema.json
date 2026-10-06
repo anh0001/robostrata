@@ -1,0 +1,100 @@
+{
+  "$defs": {
+    "FailureDiagnosis": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "perception_stale",
+            "precondition_unmet",
+            "unreachable",
+            "infeasible",
+            "provider_timeout",
+            "hardware_fault",
+            "safety_stop",
+            "hold_violated",
+            "cancelled",
+            "ack_lost",
+            "command_rejected",
+            "resource_conflict",
+            "stale_epoch",
+            "lease_lost",
+            "verification_failed",
+            "unsupported",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "category"
+      ],
+      "title": "FailureDiagnosis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "What a provider *claims* happened. Never task success by itself.",
+  "properties": {
+    "diagnosis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FailureDiagnosis"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "evidence_references": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence References",
+      "type": "array"
+    },
+    "invocation_id": {
+      "minLength": 1,
+      "title": "Invocation Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "CANCELED",
+        "UNKNOWN"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "invocation_id",
+    "status"
+  ],
+  "title": "ProviderOutcome",
+  "type": "object"
+}

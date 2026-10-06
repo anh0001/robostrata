@@ -1,0 +1,66 @@
+{
+  "$defs": {
+    "ControlMode": {
+      "enum": [
+        "position",
+        "velocity",
+        "effort",
+        "trajectory",
+        "policy",
+        "none"
+      ],
+      "title": "ControlMode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Bounded, exclusive ownership of resources. Expiry is on the monotonic clock.",
+  "properties": {
+    "control_mode": {
+      "$ref": "#/$defs/ControlMode"
+    },
+    "epoch": {
+      "minimum": 0,
+      "title": "Epoch",
+      "type": "integer"
+    },
+    "expires_at_monotonic": {
+      "title": "Expires At Monotonic",
+      "type": "number"
+    },
+    "lease_id": {
+      "minLength": 1,
+      "title": "Lease Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "resources": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+        "type": "string"
+      },
+      "title": "Resources",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "lease_id",
+    "owner_id",
+    "control_mode",
+    "epoch",
+    "expires_at_monotonic"
+  ],
+  "title": "ResourceLease",
+  "type": "object"
+}

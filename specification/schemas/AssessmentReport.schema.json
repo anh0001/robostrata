@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "AssessmentContext": {
+      "additionalProperties": false,
+      "properties": {
+        "provider_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Provider Id",
+          "type": "string"
+        },
+        "robot_state_revision": {
+          "minimum": 0,
+          "title": "Robot State Revision",
+          "type": "integer"
+        },
+        "world_snapshot_id": {
+          "minLength": 1,
+          "title": "World Snapshot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "world_snapshot_id",
+        "robot_state_revision",
+        "provider_id"
+      ],
+      "title": "AssessmentContext",
+      "type": "object"
+    },
+    "AssessmentStatus": {
+      "enum": [
+        "FEASIBLE",
+        "INFEASIBLE",
+        "UNKNOWN",
+        "NOT_APPLICABLE"
+      ],
+      "title": "AssessmentStatus",
+      "type": "string"
+    },
+    "RecommendedStep": {
+      "additionalProperties": false,
+      "properties": {
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        },
+        "skill_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Skill Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "skill_id"
+      ],
+      "title": "RecommendedStep",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "applicable_constraints": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Applicable Constraints",
+      "type": "array"
+    },
+    "context": {
+      "$ref": "#/$defs/AssessmentContext"
+    },
+    "evidence": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Evidence",
+      "type": "object"
+    },
+    "reason": {
+      "default": "",
+      "title": "Reason",
+      "type": "string"
+    },
+    "recommended_next_step": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RecommendedStep"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/AssessmentStatus"
+    }
+  },
+  "required": [
+    "status",
+    "context"
+  ],
+  "title": "AssessmentReport",
+  "type": "object"
+}

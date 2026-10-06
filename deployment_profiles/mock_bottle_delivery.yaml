@@ -1,0 +1,12 @@
+# Baseline profile: manual planner, sequential executive, no extensions, mock simulation.
+api_version: robot_framework/v1alpha1
+task_pack: examples
+robot_pack: mock_mobile_manipulator
+default_goal: goals/deliver_bottle.goal.yaml
+deployment: {mode: mock, backend: mock_sim, profile: mock}
+planning: {plugin: manual, output_kind: task_graph}
+execution: {plugin: sequential, lease_ttl_s: 5.0, monitor_poll_s: 0.005}
+extensions: []
+verification: {profile: evidence_based}
+safety: {profile: mock}
+recording: {mission_events: true, decision_evidence: true}

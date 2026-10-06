@@ -1,0 +1,278 @@
+{
+  "$defs": {
+    "CancellationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "max_stop_time_s": {
+          "exclusiveMinimum": 0.0,
+          "title": "Max Stop Time S",
+          "type": "number"
+        },
+        "mode": {
+          "default": "immediate",
+          "enum": [
+            "immediate",
+            "safe_state_first",
+            "custom"
+          ],
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "max_stop_time_s"
+      ],
+      "title": "CancellationSpec",
+      "type": "object"
+    },
+    "Condition": {
+      "additionalProperties": false,
+      "description": "A pre- or hold-condition. ``max_age_s`` makes it time-sensitive (rechecked after reserve).",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "expected": {
+          "default": true,
+          "title": "Expected",
+          "type": "boolean"
+        },
+        "max_age_s": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Age S"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predicate"
+      ],
+      "title": "Condition",
+      "type": "object"
+    },
+    "ExpectedEffect": {
+      "additionalProperties": false,
+      "description": "A physical effect the skill must produce; checked by a verifier on fresh evidence.",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "expected": {
+          "default": true,
+          "title": "Expected",
+          "type": "boolean"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predicate"
+      ],
+      "title": "ExpectedEffect",
+      "type": "object"
+    },
+    "FailureSemantics": {
+      "additionalProperties": false,
+      "properties": {
+        "retryable": {
+          "default": true,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "timeout_s": {
+          "default": 30.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Timeout S",
+          "type": "number"
+        }
+      },
+      "title": "FailureSemantics",
+      "type": "object"
+    },
+    "PortSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "number",
+            "boolean",
+            "entity",
+            "pose",
+            "object"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "PortSpec",
+      "type": "object"
+    },
+    "VerificationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "verifier_id": {
+          "default": "world_fact",
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Verifier Id",
+          "type": "string"
+        }
+      },
+      "title": "VerificationSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cancellation": {
+      "$ref": "#/$defs/CancellationSpec"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "expected_effects": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ExpectedEffect"
+      },
+      "title": "Expected Effects",
+      "type": "array"
+    },
+    "failure_semantics": {
+      "$ref": "#/$defs/FailureSemantics"
+    },
+    "hold_conditions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Condition"
+      },
+      "title": "Hold Conditions",
+      "type": "array"
+    },
+    "inputs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PortSpec"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "outputs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/PortSpec"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "preconditions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Condition"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "required_capabilities": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+        "type": "string"
+      },
+      "title": "Required Capabilities",
+      "type": "array"
+    },
+    "required_resources": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+        "type": "string"
+      },
+      "title": "Required Resources",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_id": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "verification": {
+      "$ref": "#/$defs/VerificationSpec"
+    }
+  },
+  "required": [
+    "skill_id",
+    "cancellation"
+  ],
+  "title": "SkillContract",
+  "type": "object"
+}

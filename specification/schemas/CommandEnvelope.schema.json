@@ -1,0 +1,76 @@
+{
+  "$defs": {
+    "ControlMode": {
+      "enum": [
+        "position",
+        "velocity",
+        "effort",
+        "trajectory",
+        "policy",
+        "none"
+      ],
+      "title": "ControlMode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "control_mode": {
+      "$ref": "#/$defs/ControlMode"
+    },
+    "envelope_id": {
+      "minLength": 1,
+      "title": "Envelope Id",
+      "type": "string"
+    },
+    "epoch": {
+      "minimum": 0,
+      "title": "Epoch",
+      "type": "integer"
+    },
+    "issued_at_monotonic": {
+      "title": "Issued At Monotonic",
+      "type": "number"
+    },
+    "issuer_id": {
+      "minLength": 1,
+      "title": "Issuer Id",
+      "type": "string"
+    },
+    "lease_id": {
+      "minLength": 1,
+      "title": "Lease Id",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "target_resources": {
+      "default": [],
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+        "type": "string"
+      },
+      "title": "Target Resources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "envelope_id",
+    "issuer_id",
+    "lease_id",
+    "epoch",
+    "control_mode",
+    "issued_at_monotonic"
+  ],
+  "title": "CommandEnvelope",
+  "type": "object"
+}

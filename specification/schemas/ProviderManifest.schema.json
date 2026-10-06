@@ -1,0 +1,234 @@
+{
+  "$defs": {
+    "ActionSpace": {
+      "additionalProperties": false,
+      "properties": {
+        "control_mode": {
+          "$ref": "#/$defs/ControlMode"
+        },
+        "dimension": {
+          "minimum": 1,
+          "title": "Dimension",
+          "type": "integer"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "rate_hz": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rate Hz"
+        }
+      },
+      "required": [
+        "control_mode",
+        "dimension"
+      ],
+      "title": "ActionSpace",
+      "type": "object"
+    },
+    "CancellationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "max_stop_time_s": {
+          "exclusiveMinimum": 0.0,
+          "title": "Max Stop Time S",
+          "type": "number"
+        },
+        "mode": {
+          "default": "immediate",
+          "enum": [
+            "immediate",
+            "safe_state_first",
+            "custom"
+          ],
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "max_stop_time_s"
+      ],
+      "title": "CancellationSpec",
+      "type": "object"
+    },
+    "ControlMode": {
+      "enum": [
+        "position",
+        "velocity",
+        "effort",
+        "trajectory",
+        "policy",
+        "none"
+      ],
+      "title": "ControlMode",
+      "type": "string"
+    },
+    "HardwareRequirement": {
+      "additionalProperties": false,
+      "description": "A robot capability that must be structurally present for the provider to be eligible.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Capability",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability"
+      ],
+      "title": "HardwareRequirement",
+      "type": "object"
+    },
+    "ObservationSpace": {
+      "additionalProperties": false,
+      "properties": {
+        "frame": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "keys": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Keys",
+          "type": "array"
+        }
+      },
+      "title": "ObservationSpace",
+      "type": "object"
+    },
+    "ProviderKind": {
+      "enum": [
+        "skill",
+        "policy",
+        "device"
+      ],
+      "title": "ProviderKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "action_space": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ActionSpace"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "cancellation": {
+      "$ref": "#/$defs/CancellationSpec"
+    },
+    "control_mode": {
+      "$ref": "#/$defs/ControlMode",
+      "default": "none"
+    },
+    "domains": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Domains",
+      "type": "array"
+    },
+    "hardware": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/HardwareRequirement"
+      },
+      "title": "Hardware",
+      "type": "array"
+    },
+    "implements": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Implements",
+      "type": "array"
+    },
+    "kind": {
+      "$ref": "#/$defs/ProviderKind"
+    },
+    "model_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Ref"
+    },
+    "observation_space": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ObservationSpace"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provider_id": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Provider Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "version": {
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider_id",
+    "kind",
+    "implements",
+    "version",
+    "cancellation"
+  ],
+  "title": "ProviderManifest",
+  "type": "object"
+}

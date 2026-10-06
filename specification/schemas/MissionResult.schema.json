@@ -1,0 +1,401 @@
+{
+  "$defs": {
+    "Fact": {
+      "additionalProperties": false,
+      "description": "One piece of evidence about the world, with provenance and freshness.",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "observation_time": {
+          "title": "Observation Time",
+          "type": "number"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "default": "v1alpha1",
+          "pattern": "^v\\d+(alpha|beta)?\\d*$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "validity_s": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validity S"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "required": [
+        "predicate",
+        "value",
+        "source",
+        "observation_time"
+      ],
+      "title": "Fact",
+      "type": "object"
+    },
+    "FailureDiagnosis": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "perception_stale",
+            "precondition_unmet",
+            "unreachable",
+            "infeasible",
+            "provider_timeout",
+            "hardware_fault",
+            "safety_stop",
+            "hold_violated",
+            "cancelled",
+            "ack_lost",
+            "command_rejected",
+            "resource_conflict",
+            "stale_epoch",
+            "lease_lost",
+            "verification_failed",
+            "unsupported",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "category"
+      ],
+      "title": "FailureDiagnosis",
+      "type": "object"
+    },
+    "LifecycleState": {
+      "enum": [
+        "CREATED",
+        "VALIDATED",
+        "RESERVED",
+        "RUNNING",
+        "VERIFYING",
+        "CANCELING",
+        "SUCCEEDED",
+        "FAILED",
+        "CANCELED",
+        "OUTCOME_UNKNOWN"
+      ],
+      "title": "LifecycleState",
+      "type": "string"
+    },
+    "MissionStatus": {
+      "enum": [
+        "PENDING",
+        "VALIDATED",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED",
+        "CANCELED",
+        "OUTCOME_UNKNOWN",
+        "REJECTED"
+      ],
+      "title": "MissionStatus",
+      "type": "string"
+    },
+    "RejectionReason": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        },
+        "node_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Id"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "RejectionReason",
+      "type": "object"
+    },
+    "SkillResult": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_references": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence References",
+          "type": "array"
+        },
+        "failure_diagnosis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FailureDiagnosis"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "invocation_id": {
+          "minLength": 1,
+          "title": "Invocation Id",
+          "type": "string"
+        },
+        "node_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Id"
+        },
+        "observed_effects": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Fact"
+          },
+          "title": "Observed Effects",
+          "type": "array"
+        },
+        "provider_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Id"
+        },
+        "provider_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "SUCCESS",
+                "FAILURE",
+                "CANCELED",
+                "UNKNOWN"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Status"
+        },
+        "reconciled": {
+          "default": false,
+          "title": "Reconciled",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "default": "v1alpha1",
+          "pattern": "^v\\d+(alpha|beta)?\\d*$",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "skill_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Skill Id",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/LifecycleState"
+        },
+        "verification_status": {
+          "$ref": "#/$defs/VerificationStatus"
+        }
+      },
+      "required": [
+        "invocation_id",
+        "skill_id",
+        "state",
+        "verification_status"
+      ],
+      "title": "SkillResult",
+      "type": "object"
+    },
+    "VerificationStatus": {
+      "enum": [
+        "VERIFIED",
+        "FAILED",
+        "UNKNOWN",
+        "NOT_REQUIRED",
+        "NOT_RUN"
+      ],
+      "title": "VerificationStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "events_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Events Ref"
+    },
+    "failure_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Failure Reason"
+    },
+    "goal_id": {
+      "minLength": 1,
+      "title": "Goal Id",
+      "type": "string"
+    },
+    "mission_id": {
+      "minLength": 1,
+      "title": "Mission Id",
+      "type": "string"
+    },
+    "proposal_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Proposal Id"
+    },
+    "rejection_reasons": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RejectionReason"
+      },
+      "title": "Rejection Reasons",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_results": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SkillResult"
+      },
+      "title": "Skill Results",
+      "type": "array"
+    },
+    "status": {
+      "$ref": "#/$defs/MissionStatus"
+    },
+    "verified_effects": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Fact"
+      },
+      "title": "Verified Effects",
+      "type": "array"
+    }
+  },
+  "required": [
+    "mission_id",
+    "status",
+    "goal_id"
+  ],
+  "title": "MissionResult",
+  "type": "object"
+}

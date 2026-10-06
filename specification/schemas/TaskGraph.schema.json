@@ -1,0 +1,602 @@
+{
+  "$defs": {
+    "AbortPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "abort",
+          "default": "abort",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "title": "AbortPolicy",
+      "type": "object"
+    },
+    "ConditionalNode": {
+      "additionalProperties": false,
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/FactPredicate"
+        },
+        "kind": {
+          "const": "conditional",
+          "default": "conditional",
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "otherwise": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "conditional": "#/$defs/ConditionalNode",
+                  "loop": "#/$defs/LoopNode",
+                  "parallel": "#/$defs/ParallelNode",
+                  "sequence": "#/$defs/SequenceNode",
+                  "skill": "#/$defs/SkillNode",
+                  "wait_event": "#/$defs/WaitEventNode"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/SkillNode"
+                },
+                {
+                  "$ref": "#/$defs/SequenceNode"
+                },
+                {
+                  "$ref": "#/$defs/ConditionalNode"
+                },
+                {
+                  "$ref": "#/$defs/LoopNode"
+                },
+                {
+                  "$ref": "#/$defs/WaitEventNode"
+                },
+                {
+                  "$ref": "#/$defs/ParallelNode"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Otherwise"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        },
+        "then": {
+          "discriminator": {
+            "mapping": {
+              "conditional": "#/$defs/ConditionalNode",
+              "loop": "#/$defs/LoopNode",
+              "parallel": "#/$defs/ParallelNode",
+              "sequence": "#/$defs/SequenceNode",
+              "skill": "#/$defs/SkillNode",
+              "wait_event": "#/$defs/WaitEventNode"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SkillNode"
+            },
+            {
+              "$ref": "#/$defs/SequenceNode"
+            },
+            {
+              "$ref": "#/$defs/ConditionalNode"
+            },
+            {
+              "$ref": "#/$defs/LoopNode"
+            },
+            {
+              "$ref": "#/$defs/WaitEventNode"
+            },
+            {
+              "$ref": "#/$defs/ParallelNode"
+            }
+          ],
+          "title": "Then"
+        }
+      },
+      "required": [
+        "node_id",
+        "condition",
+        "then"
+      ],
+      "title": "ConditionalNode",
+      "type": "object"
+    },
+    "FactPredicate": {
+      "additionalProperties": false,
+      "description": "A test against the world: ``predicate(*args) == expected`` on a fresh fact.",
+      "properties": {
+        "args": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "expected": {
+          "default": true,
+          "title": "Expected",
+          "type": "boolean"
+        },
+        "predicate": {
+          "minLength": 1,
+          "title": "Predicate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "predicate"
+      ],
+      "title": "FactPredicate",
+      "type": "object"
+    },
+    "LoopNode": {
+      "additionalProperties": false,
+      "properties": {
+        "child": {
+          "discriminator": {
+            "mapping": {
+              "conditional": "#/$defs/ConditionalNode",
+              "loop": "#/$defs/LoopNode",
+              "parallel": "#/$defs/ParallelNode",
+              "sequence": "#/$defs/SequenceNode",
+              "skill": "#/$defs/SkillNode",
+              "wait_event": "#/$defs/WaitEventNode"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SkillNode"
+            },
+            {
+              "$ref": "#/$defs/SequenceNode"
+            },
+            {
+              "$ref": "#/$defs/ConditionalNode"
+            },
+            {
+              "$ref": "#/$defs/LoopNode"
+            },
+            {
+              "$ref": "#/$defs/WaitEventNode"
+            },
+            {
+              "$ref": "#/$defs/ParallelNode"
+            }
+          ],
+          "title": "Child"
+        },
+        "kind": {
+          "const": "loop",
+          "default": "loop",
+          "title": "Kind",
+          "type": "string"
+        },
+        "max_iterations": {
+          "minimum": 1,
+          "title": "Max Iterations",
+          "type": "integer"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        },
+        "until": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FactPredicate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "node_id",
+        "child",
+        "max_iterations"
+      ],
+      "title": "LoopNode",
+      "type": "object"
+    },
+    "ParallelNode": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "conditional": "#/$defs/ConditionalNode",
+                "loop": "#/$defs/LoopNode",
+                "parallel": "#/$defs/ParallelNode",
+                "sequence": "#/$defs/SequenceNode",
+                "skill": "#/$defs/SkillNode",
+                "wait_event": "#/$defs/WaitEventNode"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SkillNode"
+              },
+              {
+                "$ref": "#/$defs/SequenceNode"
+              },
+              {
+                "$ref": "#/$defs/ConditionalNode"
+              },
+              {
+                "$ref": "#/$defs/LoopNode"
+              },
+              {
+                "$ref": "#/$defs/WaitEventNode"
+              },
+              {
+                "$ref": "#/$defs/ParallelNode"
+              }
+            ]
+          },
+          "minItems": 2,
+          "title": "Children",
+          "type": "array"
+        },
+        "completion": {
+          "default": "all",
+          "enum": [
+            "all",
+            "any"
+          ],
+          "title": "Completion",
+          "type": "string"
+        },
+        "kind": {
+          "const": "parallel",
+          "default": "parallel",
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "on_branch_failure": {
+          "default": "cancel_others",
+          "enum": [
+            "cancel_others",
+            "continue"
+          ],
+          "title": "On Branch Failure",
+          "type": "string"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        }
+      },
+      "required": [
+        "node_id",
+        "children"
+      ],
+      "title": "ParallelNode",
+      "type": "object"
+    },
+    "RetryPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "retry",
+          "default": "retry",
+          "title": "Kind",
+          "type": "string"
+        },
+        "max_attempts": {
+          "minimum": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "requires_reconcile": {
+          "default": false,
+          "title": "Requires Reconcile",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "max_attempts"
+      ],
+      "title": "RetryPolicy",
+      "type": "object"
+    },
+    "SequenceNode": {
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "conditional": "#/$defs/ConditionalNode",
+                "loop": "#/$defs/LoopNode",
+                "parallel": "#/$defs/ParallelNode",
+                "sequence": "#/$defs/SequenceNode",
+                "skill": "#/$defs/SkillNode",
+                "wait_event": "#/$defs/WaitEventNode"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/SkillNode"
+              },
+              {
+                "$ref": "#/$defs/SequenceNode"
+              },
+              {
+                "$ref": "#/$defs/ConditionalNode"
+              },
+              {
+                "$ref": "#/$defs/LoopNode"
+              },
+              {
+                "$ref": "#/$defs/WaitEventNode"
+              },
+              {
+                "$ref": "#/$defs/ParallelNode"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Children",
+          "type": "array"
+        },
+        "kind": {
+          "const": "sequence",
+          "default": "sequence",
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        }
+      },
+      "required": [
+        "node_id",
+        "children"
+      ],
+      "title": "SequenceNode",
+      "type": "object"
+    },
+    "SkillNode": {
+      "additionalProperties": false,
+      "properties": {
+        "bindings": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Bindings",
+          "type": "object"
+        },
+        "kind": {
+          "const": "skill",
+          "default": "skill",
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        },
+        "skill_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Skill Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_id",
+        "skill_id"
+      ],
+      "title": "SkillNode",
+      "type": "object"
+    },
+    "WaitEventNode": {
+      "additionalProperties": false,
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/FactPredicate"
+        },
+        "kind": {
+          "const": "wait_event",
+          "default": "wait_event",
+          "title": "Kind",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "poll_interval_s": {
+          "default": 0.05,
+          "exclusiveMinimum": 0.0,
+          "title": "Poll Interval S",
+          "type": "number"
+        },
+        "recovery_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Ref"
+        },
+        "timeout_s": {
+          "exclusiveMinimum": 0.0,
+          "title": "Timeout S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "node_id",
+        "condition",
+        "timeout_s"
+      ],
+      "title": "WaitEventNode",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "recoveries": {
+      "additionalProperties": {
+        "discriminator": {
+          "mapping": {
+            "abort": "#/$defs/AbortPolicy",
+            "retry": "#/$defs/RetryPolicy"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/RetryPolicy"
+          },
+          {
+            "$ref": "#/$defs/AbortPolicy"
+          }
+        ]
+      },
+      "title": "Recoveries",
+      "type": "object"
+    },
+    "root": {
+      "discriminator": {
+        "mapping": {
+          "conditional": "#/$defs/ConditionalNode",
+          "loop": "#/$defs/LoopNode",
+          "parallel": "#/$defs/ParallelNode",
+          "sequence": "#/$defs/SequenceNode",
+          "skill": "#/$defs/SkillNode",
+          "wait_event": "#/$defs/WaitEventNode"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SkillNode"
+        },
+        {
+          "$ref": "#/$defs/SequenceNode"
+        },
+        {
+          "$ref": "#/$defs/ConditionalNode"
+        },
+        {
+          "$ref": "#/$defs/LoopNode"
+        },
+        {
+          "$ref": "#/$defs/WaitEventNode"
+        },
+        {
+          "$ref": "#/$defs/ParallelNode"
+        }
+      ],
+      "title": "Root"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "root"
+  ],
+  "title": "TaskGraph",
+  "type": "object"
+}

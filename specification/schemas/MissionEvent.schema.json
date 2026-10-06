@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": [
+        "goal_received",
+        "plan_proposed",
+        "plan_validated",
+        "plan_rejected",
+        "skill_state",
+        "assessment",
+        "assessment_unknown",
+        "extension_warning",
+        "provider_selected",
+        "lease_acquired",
+        "lease_renewed",
+        "lease_released",
+        "command_rejected",
+        "verification",
+        "effects_committed",
+        "reconciled_success",
+        "reconciled_absent",
+        "reconcile_blocked",
+        "recovery_retry",
+        "epoch_bumped",
+        "sim_step",
+        "sim_pause",
+        "mission_canceled",
+        "mission_finished"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "mission_id": {
+      "minLength": 1,
+      "title": "Mission Id",
+      "type": "string"
+    },
+    "payload": {
+      "additionalProperties": true,
+      "title": "Payload",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sequence": {
+      "minimum": 0,
+      "title": "Sequence",
+      "type": "integer"
+    },
+    "time": {
+      "title": "Time",
+      "type": "number"
+    }
+  },
+  "required": [
+    "mission_id",
+    "sequence",
+    "time",
+    "kind"
+  ],
+  "title": "MissionEvent",
+  "type": "object"
+}

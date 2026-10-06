@@ -1,0 +1,109 @@
+{
+  "$defs": {
+    "LifecycleState": {
+      "enum": [
+        "CREATED",
+        "VALIDATED",
+        "RESERVED",
+        "RUNNING",
+        "VERIFYING",
+        "CANCELING",
+        "SUCCEEDED",
+        "FAILED",
+        "CANCELED",
+        "OUTCOME_UNKNOWN"
+      ],
+      "title": "LifecycleState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "bound_params": {
+      "additionalProperties": true,
+      "title": "Bound Params",
+      "type": "object"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "number"
+    },
+    "epoch": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epoch"
+    },
+    "invocation_id": {
+      "minLength": 1,
+      "title": "Invocation Id",
+      "type": "string"
+    },
+    "lease_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lease Id"
+    },
+    "node_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Node Id"
+    },
+    "provider_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Id"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "skill_id": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Skill Id",
+      "type": "string"
+    },
+    "state": {
+      "$ref": "#/$defs/LifecycleState",
+      "default": "CREATED"
+    }
+  },
+  "required": [
+    "invocation_id",
+    "skill_id",
+    "created_at"
+  ],
+  "title": "SkillInvocation",
+  "type": "object"
+}

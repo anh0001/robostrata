@@ -1,0 +1,34 @@
+task_id: bottle_delivery
+objective: deliver_object
+description: >-
+  Fetch an object from one location and deliver it to another. The object is observed right
+  before picking so that the pick precondition (pose no older than 5 s) holds on fresh evidence.
+required_capabilities: [navigation.ground, manipulation.single_arm, perception.rgbd]
+graph:
+  recoveries:
+    retry_after_reconcile: {kind: retry, max_attempts: 2, requires_reconcile: true}
+  root:
+    kind: sequence
+    node_id: deliver
+    children:
+      - kind: skill
+        node_id: go_to_pickup
+        skill_id: navigation.go_to
+        params: {location: $goal.pickup_location}
+      - kind: skill
+        node_id: observe_object
+        skill_id: perception.observe_target
+        params: {target: $goal.object}
+      - kind: skill
+        node_id: pick_object
+        skill_id: manipulation.pick
+        params: {object: $goal.object}
+        recovery_ref: retry_after_reconcile
+      - kind: skill
+        node_id: go_to_delivery
+        skill_id: navigation.go_to
+        params: {location: $goal.delivery_location}
+      - kind: skill
+        node_id: place_object
+        skill_id: manipulation.place
+        params: {object: $goal.object, location: $goal.delivery_location}

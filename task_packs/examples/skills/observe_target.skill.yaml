@@ -1,0 +1,13 @@
+skill_id: perception.observe_target
+description: Observe a target entity and refresh its pose estimate.
+inputs:
+  - {name: target, type: entity}
+outputs:
+  - {name: pose, type: pose, required: false}
+expected_effects:
+  - {predicate: pose_known, args: ["$target"], expected: true}
+verification: {required: true, verifier_id: world_fact}
+cancellation: {mode: immediate, max_stop_time_s: 1.0}
+failure_semantics: {timeout_s: 10.0, retryable: true}
+required_capabilities: [perception.rgbd]
+required_resources: []

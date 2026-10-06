@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "Deployment": {
+      "additionalProperties": false,
+      "properties": {
+        "backend": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Backend",
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/$defs/DeploymentMode"
+        },
+        "profile": {
+          "default": "default",
+          "minLength": 1,
+          "title": "Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "backend"
+      ],
+      "title": "Deployment",
+      "type": "object"
+    },
+    "DeploymentMode": {
+      "enum": [
+        "mock",
+        "simulation",
+        "hil",
+        "real",
+        "replay"
+      ],
+      "title": "DeploymentMode",
+      "type": "string"
+    },
+    "ExecutionCfg": {
+      "additionalProperties": false,
+      "properties": {
+        "lease_ttl_s": {
+          "default": 5.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Lease Ttl S",
+          "type": "number"
+        },
+        "monitor_poll_s": {
+          "default": 0.005,
+          "exclusiveMinimum": 0.0,
+          "title": "Monitor Poll S",
+          "type": "number"
+        },
+        "plugin": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Plugin",
+          "type": "string"
+        },
+        "provider_preference": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Provider Preference",
+          "type": "object"
+        }
+      },
+      "required": [
+        "plugin"
+      ],
+      "title": "ExecutionCfg",
+      "type": "object"
+    },
+    "ExtensionRef": {
+      "additionalProperties": false,
+      "properties": {
+        "config": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Config"
+        },
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "ExtensionRef",
+      "type": "object"
+    },
+    "PlanArtifactKind": {
+      "enum": [
+        "task_graph",
+        "native_bt_xml",
+        "temporal_plan",
+        "policy_goal"
+      ],
+      "title": "PlanArtifactKind",
+      "type": "string"
+    },
+    "PlanningCfg": {
+      "additionalProperties": false,
+      "properties": {
+        "output_kind": {
+          "$ref": "#/$defs/PlanArtifactKind",
+          "default": "task_graph"
+        },
+        "plugin": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Plugin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "plugin"
+      ],
+      "title": "PlanningCfg",
+      "type": "object"
+    },
+    "RecordingCfg": {
+      "additionalProperties": false,
+      "properties": {
+        "decision_evidence": {
+          "default": true,
+          "title": "Decision Evidence",
+          "type": "boolean"
+        },
+        "mission_events": {
+          "default": true,
+          "title": "Mission Events",
+          "type": "boolean"
+        }
+      },
+      "title": "RecordingCfg",
+      "type": "object"
+    },
+    "SafetyCfg": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "minLength": 1,
+          "title": "Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile"
+      ],
+      "title": "SafetyCfg",
+      "type": "object"
+    },
+    "VerificationCfg": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "const": "evidence_based",
+          "default": "evidence_based",
+          "title": "Profile",
+          "type": "string"
+        }
+      },
+      "title": "VerificationCfg",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "api_version": {
+      "const": "robot_framework/v1alpha1",
+      "title": "Api Version",
+      "type": "string"
+    },
+    "default_goal": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Default Goal"
+    },
+    "deployment": {
+      "$ref": "#/$defs/Deployment"
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionCfg"
+    },
+    "extensions": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ExtensionRef"
+      },
+      "title": "Extensions",
+      "type": "array"
+    },
+    "planning": {
+      "$ref": "#/$defs/PlanningCfg"
+    },
+    "recording": {
+      "$ref": "#/$defs/RecordingCfg"
+    },
+    "robot_pack": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Robot Pack",
+      "type": "string"
+    },
+    "safety": {
+      "$ref": "#/$defs/SafetyCfg"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_pack": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Task Pack",
+      "type": "string"
+    },
+    "verification": {
+      "$ref": "#/$defs/VerificationCfg"
+    }
+  },
+  "required": [
+    "api_version",
+    "task_pack",
+    "robot_pack",
+    "deployment",
+    "planning",
+    "execution",
+    "safety"
+  ],
+  "title": "DeploymentProfile",
+  "type": "object"
+}

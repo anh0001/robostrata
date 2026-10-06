@@ -1,0 +1,211 @@
+{
+  "$defs": {
+    "CapabilityBinding": {
+      "additionalProperties": false,
+      "description": "``structural`` capabilities exist in hardware; dynamic availability is a runtime check.",
+      "properties": {
+        "capability": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Capability",
+          "type": "string"
+        },
+        "components": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Components",
+          "type": "array"
+        },
+        "structural": {
+          "default": true,
+          "title": "Structural",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "capability",
+        "components"
+      ],
+      "title": "CapabilityBinding",
+      "type": "object"
+    },
+    "ComponentEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "child": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Child",
+          "type": "string"
+        },
+        "joint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Joint"
+        },
+        "parent": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Parent",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent",
+        "child"
+      ],
+      "title": "ComponentEdge",
+      "type": "object"
+    },
+    "ComponentNode": {
+      "additionalProperties": false,
+      "properties": {
+        "component_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Component Id",
+          "type": "string"
+        },
+        "interfaces": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Interfaces",
+          "type": "array"
+        },
+        "resources": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ResourceDecl"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "type": {
+          "minLength": 1,
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "component_id",
+        "type"
+      ],
+      "title": "ComponentNode",
+      "type": "object"
+    },
+    "ResourceDecl": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "default": "actuator",
+          "enum": [
+            "actuator",
+            "sensor",
+            "workspace",
+            "tool"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "resource_id": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+          "title": "Resource Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id"
+      ],
+      "title": "ResourceDecl",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "calibration_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calibration Ref"
+    },
+    "capabilities": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CapabilityBinding"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "components": {
+      "items": {
+        "$ref": "#/$defs/ComponentNode"
+      },
+      "minItems": 1,
+      "title": "Components",
+      "type": "array"
+    },
+    "description_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description Ref"
+    },
+    "edges": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ComponentEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "robot_id": {
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "title": "Robot Id",
+      "type": "string"
+    },
+    "safety_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Safety Ref"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "robot_id",
+    "components"
+  ],
+  "title": "RobotManifest",
+  "type": "object"
+}

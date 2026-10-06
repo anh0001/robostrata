@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "description": "A short horizon of policy actions; dispatched under a lease and epoch like any command.",
+  "properties": {
+    "actions": {
+      "default": [],
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "epoch": {
+      "minimum": 0,
+      "title": "Epoch",
+      "type": "integer"
+    },
+    "frame": {
+      "minLength": 1,
+      "title": "Frame",
+      "type": "string"
+    },
+    "horizon": {
+      "minimum": 1,
+      "title": "Horizon",
+      "type": "integer"
+    },
+    "schema_version": {
+      "default": "v1alpha1",
+      "pattern": "^v\\d+(alpha|beta)?\\d*$",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "horizon",
+    "frame",
+    "epoch"
+  ],
+  "title": "ActionChunk",
+  "type": "object"
+}

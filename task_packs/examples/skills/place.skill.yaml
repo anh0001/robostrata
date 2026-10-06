@@ -1,0 +1,16 @@
+skill_id: manipulation.place
+description: Put a held object down at the robot's current location.
+inputs:
+  - {name: object, type: entity}
+  - {name: location, type: entity}
+preconditions:
+  - {predicate: holding, args: [robot, "$object"], expected: true}
+  - {predicate: at, args: [robot, "$location"], expected: true}
+expected_effects:
+  - {predicate: holding, args: [robot, "$object"], expected: false}
+  - {predicate: at, args: ["$object", "$location"], expected: true}
+verification: {required: true, verifier_id: world_fact}
+cancellation: {mode: safe_state_first, max_stop_time_s: 2.0}
+failure_semantics: {timeout_s: 30.0, retryable: true}
+required_capabilities: [manipulation.single_arm]
+required_resources: [arm_0, gripper_0]
