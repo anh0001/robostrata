@@ -8,8 +8,7 @@ research extensions as swappable packages.
 > the conformance suite run today without ROS, without an LLM and without the
 > affordance–effectivity extension. Real robots, simulators, behavior-tree executives and
 > LLM/BTGenBot-2/PlanSys2/VLA backends are later phases; the
-> [Implemented vs. designed](#implemented-vs-designed) table is the source of truth. The Phase 1
-> plan and its implementation report live under `.claude/PRPs/`.
+> [Implemented vs. designed](#implemented-vs-designed) table is the source of truth.
 
 ## Why
 

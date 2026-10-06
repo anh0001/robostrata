@@ -19,3 +19,6 @@ htmlcov/
 # Mission recordings
 recordings/
 *.jsonl
+
+# Local agent workspace (plans, reports); not part of the project
+.claude/
